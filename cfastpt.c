@@ -382,6 +382,16 @@ void J_abl(double *x, double *fx, int alpha, int beta, long N, fastpt_config *co
 	free(fb);
 }
 
+void Pd1d2(double *k, double *Pin, long Nk, double *Pout){
+	int alpha_ar[] = {0,0,1};
+	int beta_ar[]  = {0,0,-1};
+	int ell_ar[]   = {0,2,1};
+	int isP13type_ar[] = {0,0,0};
+	double coeff_A_ar[] = {2.*(17./21), 2.*(4./21), 2.};
+
+	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, 3, Pout, k, Pin, Nk);
+}
+
 int main(int argc, char const *argv[])
 {
 	FILE *finput;
@@ -406,17 +416,12 @@ int main(int argc, char const *argv[])
 	// int beta_ar[]  = {0,0,0,-2,-1,-1,-2};
 	// int ell_ar[]   = {0,2,4,2,1,3,0};
 
-	int alpha_ar[] = {0,0,1};
-	int beta_ar[]  = {0,0,-1};
-	int ell_ar[]   = {0,2,1};
-	int isP13type_ar[] = {0,0,0};
-	double coeff_A_ar[] = {2.*(17./21), 2.*(4./21), 2.};
 
 	double Pout[Nk];
 
 	clock_t t1, t2;
 	t1 = clock();
-	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, 3, Pout, k, Pin, Nk);
+	Pd1d2(k, Pin, Nk, Pout);
 	t2 = clock();
 	printf("time: %lg\n", (double)(t2 - t1) / CLOCKS_PER_SEC);
 

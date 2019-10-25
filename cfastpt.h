@@ -26,3 +26,6 @@ typedef struct fastpt_todolist {
 	fastpt_todo *fastpt_todo;
 	int N_todo;
 } fastpt_todolist;
+
+
+void Pd1d2(double *k, double *Pin, long Nk, double *Pout);

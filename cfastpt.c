@@ -388,8 +388,53 @@ void Pd1d2(double *k, double *Pin, long Nk, double *Pout){
 	int ell_ar[]   = {0,2,1};
 	int isP13type_ar[] = {0,0,0};
 	double coeff_A_ar[] = {2.*(17./21), 2.*(4./21), 2.};
+	int Nterms = 3;
 
-	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, 3, Pout, k, Pin, Nk);
+	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, Nterms, Pout, k, Pin, Nk);
+}
+
+void Pd2d2(double *k, double *Pin, long Nk, double *Pout){
+	int alpha_ar[] = {0};
+	int beta_ar[]  = {0};
+	int ell_ar[]   = {0};
+	int isP13type_ar[] = {0};
+	double coeff_A_ar[] = {2.};
+	int Nterms = 1;
+
+	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, Nterms, Pout, k, Pin, Nk);
+}
+
+void Pd1s2(double *k, double *Pin, long Nk, double *Pout){
+	int alpha_ar[] = {0,0,0,1,1};
+	int beta_ar[]  = {0,0,0,-1,-1};
+	int ell_ar[]   = {0,2,4,1,3};
+	int isP13type_ar[] = {0,0,0,0,0};
+	double coeff_A_ar[] = {2*(8./315.),2*(254./441.),2*(16./245.),2*(4./15.),2*(2./5.)};
+	int Nterms = 5;
+
+	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, Nterms, Pout, k, Pin, Nk);
+}
+
+void Pd2s2(double *k, double *Pin, long Nk, double *Pout){
+	int alpha_ar[] = {0};
+	int beta_ar[]  = {0};
+	int ell_ar[]   = {2};
+	int isP13type_ar[] = {0};
+	double coeff_A_ar[] = {2.*2./3.};
+	int Nterms = 1;
+
+	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, Nterms, Pout, k, Pin, Nk);
+}
+
+void Ps2s2(double *k, double *Pin, long Nk, double *Pout){
+	int alpha_ar[] = {0,0,0};
+	int beta_ar[]  = {0,0,0};
+	int ell_ar[]   = {0,2,4};
+	int isP13type_ar[] = {0,0,0};
+	double coeff_A_ar[] = {2.*(4./45.), 2*(8./63.), 2*(8./35.)};
+	int Nterms = 3;
+
+	fastpt_scalar(alpha_ar, beta_ar, ell_ar, isP13type_ar, coeff_A_ar, Nterms, Pout, k, Pin, Nk);
 }
 
 int main(int argc, char const *argv[])
@@ -422,6 +467,10 @@ int main(int argc, char const *argv[])
 	clock_t t1, t2;
 	t1 = clock();
 	Pd1d2(k, Pin, Nk, Pout);
+	Pd2d2(k, Pin, Nk, Pout);
+	Pd1s2(k, Pin, Nk, Pout);
+	Pd2s2(k, Pin, Nk, Pout);
+	Ps2s2(k, Pin, Nk, Pout);
 	t2 = clock();
 	printf("time: %lg\n", (double)(t2 - t1) / CLOCKS_PER_SEC);
 

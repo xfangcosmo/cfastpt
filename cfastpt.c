@@ -910,7 +910,7 @@ void IA_mix(double *k, double *Pin, long Nk, double *P_A, double *P_B, double *P
 	double g[3*Nk-2];
 	fftconvolve_real(Pin, f, Nk, 2*Nk-1, g);
 	for(i=0; i<Nk; i++){
-		P_B[i] = 4.* pow(k[i],3)/(2.*M_PI*M_PI) * Pin[i] * g[Nk-1+i] * dL; 
+		P_B[i] = pow(k[i],3)/(2.*M_PI*M_PI) * Pin[i] * g[Nk-1+i] * dL; 
 	}
 }
 

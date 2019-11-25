@@ -23,7 +23,7 @@ void fastpt_scalar(int *alpha_ar, int *beta_ar, int *ell_ar, int *isP13type_ar, 
 	// printf("Nk:%ld\n", Nk);
 	fastpt_config config;
 	config.nu = -2.; config.c_window_width = 0.25; config.N_pad = 1000;
-	config.N_extrap_low = 00; config.N_extrap_high = 0;
+	config.N_extrap_low = 500; config.N_extrap_high = 500;
 
 	// printf("Nk:%ld\n", Nk_extend);
 	// exit(0);
@@ -243,7 +243,7 @@ void fastpt_tensor(int *alpha_ar, int *beta_ar, int *J1_ar, int *J2_ar, int *Jk_
 	// printf("Nk:%ld\n", Nk);
 	fastpt_config config;
 	config.c_window_width = 0.25; config.N_pad = 1000;
-	config.N_extrap_low = 00; config.N_extrap_high = 0;
+	config.N_extrap_low = 500; config.N_extrap_high = 500;
 
 	// printf("Nk:%ld\n", Nk_extend);
 	// exit(0);
@@ -795,19 +795,19 @@ void IA_ta(double *k, double *Pin, long Nk, double *P_dE1, double *P_dE2, double
 
 	for(i=0; i<Nk-1-Ncut; i++){
 		r = exps[i];
-		f[i] = 768./7 - 256/(7293.*pow(r,10)) - 256/(3003.*pow(r,8)) - 256/(1001.*pow(r,6)) - 256/(231.*pow(r,4)) - 256/(21.*r*r);
+		f[i] = r* ( 768./7 - 256/(7293.*pow(r,10)) - 256/(3003.*pow(r,8)) - 256/(1001.*pow(r,6)) - 256/(231.*pow(r,4)) - 256/(21.*r*r)  );
 	}
 	for( ; i<Nk-1; i++){
 		r = exps[i];
-		f[i] = 30. + 146*r*r - 110*pow(r,4) + 30*pow(r,6) + log(fabs(r-1.)/(r+1.))*(15./r - 60.*r + 90*pow(r,3) - 60*pow(r,5) + 15*pow(r,7));
+		f[i] = r* ( 30. + 146*r*r - 110*pow(r,4) + 30*pow(r,6) + log(fabs(r-1.)/(r+1.))*(15./r - 60.*r + 90*pow(r,3) - 60*pow(r,5) + 15*pow(r,7))  );
 	}
 	for(i=Nk; i<Nk-1+Ncut; i++){
 		r = exps[i];
-		f[i] = 30. + 146*r*r - 110*pow(r,4) + 30*pow(r,6) + log(fabs(r-1.)/(r+1.))*(15./r - 60.*r + 90*pow(r,3) - 60*pow(r,5) + 15*pow(r,7));
+		f[i] = r* ( 30. + 146*r*r - 110*pow(r,4) + 30*pow(r,6) + log(fabs(r-1.)/(r+1.))*(15./r - 60.*r + 90*pow(r,3) - 60*pow(r,5) + 15*pow(r,7))  );
 	}
 	for( ; i<2*Nk-1; i++){
 		r = exps[i];
-		f[i] = 256*r*r - 256*pow(r,4) + (768*pow(r,6))/7. - (256*pow(r,8))/21. - (256*pow(r,10))/231. - (256*pow(r,12))/1001. - (256*pow(r,14))/3003.;
+		f[i] = r* ( 256*r*r - 256*pow(r,4) + (768*pow(r,6))/7. - (256*pow(r,8))/21. - (256*pow(r,10))/231. - (256*pow(r,12))/1001. - (256*pow(r,14))/3003.  );
 	}
 	f[Nk-1] = 96.;
 	double g[3*Nk-2];
@@ -825,7 +825,7 @@ void IA_mix(double *k, double *Pin, long Nk, double *P_A, double *P_B, double *P
 	int alpha_ar_A[] = {0,0,0,0,0,0,0, 1,1,1,1,1,1};
 	int beta_ar_A[]  = {0,0,0,0,0,0,0, -1,-1,-1,-1,-1,-1};
 	int l1_ar_A[]    = {0,2,0,2,1,1,0, 0,2,1,1,0,0};
-	int l2_ar_A[]    = {0,0,0,0,1,1,0, 0,2,1,1,0,0};
+	int l2_ar_A[]    = {0,0,0,0,1,1,0, 0,0,1,1,2,0};
 	int l_ar_A[]     = {0,0,2,2,1,3,4, 1,1,0,2,1,3};
 	double coeff_A_ar_A[] = {2.*(-31./210.), 2*(-34./63), 2*(-47./147), 2*(-8./63),2*(93./70), 2*(6./35), 2*(-8./245),\
 							2.*(-3./10),2.*(-1./3),2.*(1./2),2.*(1.),2.*(-1./3),2.*(-1./5)};
@@ -861,7 +861,7 @@ void IA_mix(double *k, double *Pin, long Nk, double *P_A, double *P_B, double *P
 	fastpt_tensor(alpha_ar_DEE_new, beta_ar_DEE_new, J1_ar_DEE, J2_ar_DEE, Jk_ar_DEE, coeff_AB_ar_DEE, Nterms_DEE_new, P_DEE, k, Pin, Nk);
 
 	// D_BB term
-	int Nterms_DBB=4;
+	int Nterms_DBB=8;
 	int alpha_ar_DBB[] = {0,0,0,0, 0,0,0,0};
 	int beta_ar_DBB[]  = {0,0,0,0, 0,0,0,0};
 	int l1_ar_DBB[]    = {0,2,4,0, 2,1,3,2};
@@ -890,21 +890,21 @@ void IA_mix(double *k, double *Pin, long Nk, double *P_A, double *P_B, double *P
 
 	for(i=0; i<Nk-1-Ncut; i++){
 		r = exps[i];
-		f[i] = (-16./147 - 16/(415701.*pow(r,12)) - 32/(357357.*pow(r,10)) - 16/(63063.*pow(r,8)) - 64/(63063.*pow(r,6)) - 16/(1617.*pow(r,4)) + 32/(441.*r*r) )/2.;
+		f[i] = r* (-16./147 - 16/(415701.*pow(r,12)) - 32/(357357.*pow(r,10)) - 16/(63063.*pow(r,8)) - 64/(63063.*pow(r,6)) - 16/(1617.*pow(r,4)) + 32/(441.*r*r) )/2.;
 	}
 	for( ; i<Nk-1; i++){
 		r = exps[i];
-		f[i] = ((2.* r * (225.- 600.* r*r + 1198.* pow(r,4) - 600.* pow(r,6) + 225.* pow(r,8)) + \
+		f[i] = r* ((2.* r * (225.- 600.* r*r + 1198.* pow(r,4) - 600.* pow(r,6) + 225.* pow(r,8)) + \
     				225.* pow((r*r - 1.),4) * (r*r + 1.) * log(fabs(r-1)/(r+1)) )/(20160.* pow(r,3)) - 29./315*r*r )/2.;
 	}
 	for(i=Nk; i<Nk-1+Ncut; i++){
 		r = exps[i];
-		f[i] = ((2.* r * (225.- 600.* r*r + 1198.* pow(r,4) - 600.* pow(r,6) + 225.* pow(r,8)) + \
+		f[i] = r* ((2.* r * (225.- 600.* r*r + 1198.* pow(r,4) - 600.* pow(r,6) + 225.* pow(r,8)) + \
     				225.* pow((r*r - 1.),4) * (r*r + 1.) * log(fabs(r-1)/(r+1)) )/(20160.* pow(r,3)) - 29./315*r*r )/2.;
 	}
 	for( ; i<2*Nk-1; i++){
 		r = exps[i];
-		f[i] = ( (-16*pow(r,4))/147. + (32*pow(r,6))/441. - (16*pow(r,8))/1617. - (64*pow(r,10))/63063. - 16*pow(r,12)/63063. - (32*pow(r,14))/357357. - (16*pow(r,16))/415701. )/2.;
+		f[i] = r* ( (-16*pow(r,4))/147. + (32*pow(r,6))/441. - (16*pow(r,8))/1617. - (64*pow(r,10))/63063. - 16*pow(r,12)/63063. - (32*pow(r,14))/357357. - (16*pow(r,16))/415701. )/2.;
 	}
 	f[Nk-1] = -1./42.;
 	double g[3*Nk-2];
@@ -954,8 +954,11 @@ int main(int argc, char const *argv[])
 	// Ps2s2(k, Pin, Nk, Pout);
 
 	IA_tt(k, Pin, Nk, IA_tt_EE, IA_tt_BB);
+	printf("tt finished\n");
 	IA_ta(k, Pin, Nk, IA_ta_dE1, IA_ta_dE2, IA_ta_0E0E, IA_ta_0B0B);
+	printf("ta finished\n");
 	IA_mix(k,Pin, Nk, IA_mix_A, IA_mix_B, IA_mix_DEE, IA_mix_DBB);
+	printf("mix finished\n");
 
 	t2 = clock();
 	printf("time: %lg\n", (double)(t2 - t1) / CLOCKS_PER_SEC);

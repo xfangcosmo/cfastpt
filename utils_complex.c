@@ -268,7 +268,7 @@ void fftconvolve_real(double *in1, double *in2, long N1, long N2, double *out) {
 	fftw_execute(pa);
 	fftw_execute(pb);
 
-	for(i=0;i<Ntotal;i++){
+	for(i=0;i<Ncomplex;i++){
 		a1[i] *= b1[i];
 	}
 	pc = fftw_plan_dft_c2r_1d(Ntotal, a1, c, FFTW_ESTIMATE);

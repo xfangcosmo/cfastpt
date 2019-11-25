@@ -40,3 +40,4 @@ void Ps2s2(double *k, double *Pin, long Nk, double *Pout);
 
 void IA_tt(double *k, double *Pin, long Nk, double *P_E, double *P_B);
 void IA_ta(double *k, double *Pin, long Nk, double *P_dE1, double *P_dE2, double *P_0E0E, double *P_0B0B);
+void IA_mix(double *k, double *Pin, long Nk, double *P_A, double *P_B, double *P_DEE, double *P_DBB);

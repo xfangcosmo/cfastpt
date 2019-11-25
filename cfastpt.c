@@ -22,7 +22,7 @@ void fastpt_scalar(int *alpha_ar, int *beta_ar, int *ell_ar, int *isP13type_ar, 
 	for(i=0;i<Nterms;i++) {Fy[i] = malloc(sizeof(double) * Nk);}
 	// printf("Nk:%ld\n", Nk);
 	fastpt_config config;
-	config.nu = -2.; config.c_window_width = 0.25; config.N_pad = 1000;
+	config.nu = -2.; config.c_window_width = 0.25; config.N_pad = 1500;
 	config.N_extrap_low = 500; config.N_extrap_high = 500;
 
 	// printf("Nk:%ld\n", Nk_extend);
@@ -242,7 +242,7 @@ void fastpt_tensor(int *alpha_ar, int *beta_ar, int *J1_ar, int *J2_ar, int *Jk_
 	for(i=0;i<Nterms;i++) {Fy[i] = malloc(sizeof(double) * Nk);}
 	// printf("Nk:%ld\n", Nk);
 	fastpt_config config;
-	config.c_window_width = 0.25; config.N_pad = 1000;
+	config.c_window_width = 0.25; config.N_pad = 1500;
 	config.N_extrap_low = 500; config.N_extrap_high = 500;
 
 	// printf("Nk:%ld\n", Nk_extend);

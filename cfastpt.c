@@ -725,6 +725,99 @@ void IA_tt(double *k, double *Pin, long Nk, double *P_E, double *P_B){
 }
 
 
+void IA_ta(double *k, double *Pin, long Nk, double *P_dE1, double *P_dE2, double *P_0E0E, double *P_0B0B){
+	int i;
+
+	// deltaE1 term
+	int Nterms_dE1=4;
+	int alpha_ar_dE1[] = {0,0, 1, -1};
+	int beta_ar_dE1[]  = {0,0,-1, 1};
+	int l1_ar_dE1[]    = {0,0, 0,  0};
+	int l2_ar_dE1[]    = {2,2,2,2};
+	int l_ar_dE1[]     = {0,2,1,1};
+	double coeff_A_ar_dE1[] = {2.*(17./21.), 2*(4./21.), 1., 1.};
+
+	int Nterms_dE1_new =0;
+	for(i=0; i<Nterms_dE1; i++){
+		Nterms_dE1_new += (l1_ar_dE1[i]+l2_ar_dE1[i]-abs(l1_ar_dE1[i]-l2_ar_dE1[i])+1) * (l1_ar_dE1[i]+l_ar_dE1[i]-abs(l1_ar_dE1[i]-l_ar_dE1[i])+1) * (l_ar_dE1[i]+l2_ar_dE1[i]-abs(l_ar_dE1[i]-l2_ar_dE1[i])+1);
+	}
+
+	int alpha_ar_dE1_new[Nterms_dE1_new], beta_ar_dE1_new[Nterms_dE1_new],J1_ar_dE1[Nterms_dE1_new], J2_ar_dE1[Nterms_dE1_new], Jk_ar_dE1[Nterms_dE1_new];
+	double coeff_AB_ar_dE1[Nterms_dE1_new];
+
+	Nterms_dE1_new = J_table(alpha_ar_dE1, beta_ar_dE1, l1_ar_dE1, l2_ar_dE1, l_ar_dE1, coeff_A_ar_dE1, Nterms_dE1, alpha_ar_dE1_new, beta_ar_dE1_new, J1_ar_dE1, J2_ar_dE1, Jk_ar_dE1, coeff_AB_ar_dE1);
+	fastpt_tensor(alpha_ar_dE1_new, beta_ar_dE1_new, J1_ar_dE1, J2_ar_dE1, Jk_ar_dE1, coeff_AB_ar_dE1, Nterms_dE1_new, P_dE1, k, Pin, Nk);
+
+	// 0E0E term
+	int Nterms_0E0E=4;
+	int alpha_ar_0E0E[] = {0,0,0,0};
+	int beta_ar_0E0E[]  = {0,0,0,0};
+	int l1_ar_0E0E[]    = {0,2,2,0};
+	int l2_ar_0E0E[]    = {0,0,2,4};
+	int l_ar_0E0E[]     = {0,0,0,0};
+	double coeff_A_ar_0E0E[] = {29./90., 5./63., 19./18., 19./35};
+
+	int Nterms_0E0E_new=0;
+	for(i=0; i<Nterms_0E0E; i++){
+		Nterms_0E0E_new += (l1_ar_0E0E[i]+l2_ar_0E0E[i]-abs(l1_ar_0E0E[i]-l2_ar_0E0E[i])+1) * (l1_ar_0E0E[i]+l_ar_0E0E[i]-abs(l1_ar_0E0E[i]-l_ar_0E0E[i])+1) * (l_ar_0E0E[i]+l2_ar_0E0E[i]-abs(l_ar_0E0E[i]-l2_ar_0E0E[i])+1);
+	}
+	int alpha_ar_0E0E_new[Nterms_0E0E_new], beta_ar_0E0E_new[Nterms_0E0E_new],J1_ar_0E0E[Nterms_0E0E_new], J2_ar_0E0E[Nterms_0E0E_new], Jk_ar_0E0E[Nterms_0E0E_new];
+	double coeff_AB_ar_0E0E[Nterms_0E0E_new];
+	Nterms_0E0E_new = J_table(alpha_ar_0E0E, beta_ar_0E0E, l1_ar_0E0E, l2_ar_0E0E, l_ar_0E0E, coeff_A_ar_0E0E, Nterms_0E0E, alpha_ar_0E0E_new, beta_ar_0E0E_new, J1_ar_0E0E, J2_ar_0E0E, Jk_ar_0E0E, coeff_AB_ar_0E0E);
+	fastpt_tensor(alpha_ar_0E0E_new, beta_ar_0E0E_new, J1_ar_0E0E, J2_ar_0E0E, Jk_ar_0E0E, coeff_AB_ar_0E0E, Nterms_0E0E_new, P_0E0E, k, Pin, Nk);
+
+	// 0B0B term
+	int Nterms_0B0B=5;
+	int alpha_ar_0B0B[] = {0,0,0,0,0};
+	int beta_ar_0B0B[]  = {0,0,0,0,0};
+	int l1_ar_0B0B[]    = {0,2,2,0,1};
+	int l2_ar_0B0B[]    = {0,0,2,4,1};
+	int l_ar_0B0B[]     = {0,0,0,0,1};
+	double coeff_A_ar_0B0B[] = {2./45, -44./63, -8./9, -16./35, 2.};
+
+	int Nterms_0B0B_new=0;
+	for(i=0; i<Nterms_0B0B; i++){
+		Nterms_0B0B_new += (l1_ar_0B0B[i]+l2_ar_0B0B[i]-abs(l1_ar_0B0B[i]-l2_ar_0B0B[i])+1) * (l1_ar_0B0B[i]+l_ar_0B0B[i]-abs(l1_ar_0B0B[i]-l_ar_0B0B[i])+1) * (l_ar_0B0B[i]+l2_ar_0B0B[i]-abs(l_ar_0B0B[i]-l2_ar_0B0B[i])+1);
+	}
+	int alpha_ar_0B0B_new[Nterms_0B0B_new], beta_ar_0B0B_new[Nterms_0B0B_new],J1_ar_0B0B[Nterms_0B0B_new], J2_ar_0B0B[Nterms_0B0B_new], Jk_ar_0B0B[Nterms_0B0B_new];
+	double coeff_AB_ar_0B0B[Nterms_0B0B_new];
+	Nterms_0B0B_new = J_table(alpha_ar_0B0B, beta_ar_0B0B, l1_ar_0B0B, l2_ar_0B0B, l_ar_0B0B, coeff_A_ar_0B0B, Nterms_0B0B, alpha_ar_0B0B_new, beta_ar_0B0B_new, J1_ar_0B0B, J2_ar_0B0B, Jk_ar_0B0B, coeff_AB_ar_0B0B);
+	fastpt_tensor(alpha_ar_0B0B_new, beta_ar_0B0B_new, J1_ar_0B0B, J2_ar_0B0B, Jk_ar_0B0B, coeff_AB_ar_0B0B, Nterms_0B0B_new, P_0B0B, k, Pin, Nk);
+
+	// deltaE2 term
+	double exps[2*Nk-1], f[2*Nk-1];
+	double dL = log(k[1]/k[0]);
+	long Ncut = floor(3./dL);
+	double r;
+	for(i=0; i<2*Nk-1; i++){
+		exps[i] = exp(-dL*(i-Nk+1));
+	}
+
+	for(i=0; i<Nk-1-Ncut; i++){
+		r = exps[i];
+		f[i] = 768./7 - 256/(7293.*pow(r,10)) - 256/(3003.*pow(r,8)) - 256/(1001.*pow(r,6)) - 256/(231.*pow(r,4)) - 256/(21.*r*r);
+	}
+	for( ; i<Nk-1; i++){
+		r = exps[i];
+		f[i] = 30. + 146*r*r - 110*pow(r,4) + 30*pow(r,6) + log(fabs(r-1.)/(r+1.))*(15./r - 60.*r + 90*pow(r,3) - 60*pow(r,5) + 15*pow(r,7));
+	}
+	for(i=Nk; i<Nk-1+Ncut; i++){
+		r = exps[i];
+		f[i] = 30. + 146*r*r - 110*pow(r,4) + 30*pow(r,6) + log(fabs(r-1.)/(r+1.))*(15./r - 60.*r + 90*pow(r,3) - 60*pow(r,5) + 15*pow(r,7));
+	}
+	for( ; i<2*Nk-1; i++){
+		r = exps[i];
+		f[i] = 256*r*r - 256*pow(r,4) + (768*pow(r,6))/7. - (256*pow(r,8))/21. - (256*pow(r,10))/231. - (256*pow(r,12))/1001. - (256*pow(r,14))/3003.;
+	}
+	f[Nk-1] = 96.;
+	double g[3*Nk-2];
+	fftconvolve_real(Pin, f, Nk, 2*Nk-1, g);
+	for(i=0; i<Nk; i++){
+		P_dE2[i] = 2.* pow(k[i],3)/(896.*M_PI*M_PI) * Pin[i] * g[Nk-1+i] * dL; 
+	}
+}
+
+
 int main(int argc, char const *argv[])
 {
 	FILE *finput;
@@ -751,8 +844,8 @@ int main(int argc, char const *argv[])
 
 
 	double Pout[Nk];
-	double P_E[Nk],P_B[Nk];
-
+	double IA_tt_EE[Nk],IA_tt_BB[Nk];
+	double IA_ta_dE1[Nk], IA_ta_dE2[Nk], IA_ta_0E0E[Nk], IA_ta_0B0B[Nk];
 	clock_t t1, t2;
 	t1 = clock();
 	// Pd1d2(k, Pin, Nk, Pout);
@@ -761,7 +854,8 @@ int main(int argc, char const *argv[])
 	// Pd2s2(k, Pin, Nk, Pout);
 	// Ps2s2(k, Pin, Nk, Pout);
 
-	IA_tt(k, Pin, Nk, P_E, P_B);
+	IA_tt(k, Pin, Nk, IA_tt_EE, IA_tt_BB);
+	IA_ta(k, Pin, Nk, IA_ta_dE1, IA_ta_dE2, IA_ta_0E0E, IA_ta_0B0B);
 	t2 = clock();
 	printf("time: %lg\n", (double)(t2 - t1) / CLOCKS_PER_SEC);
 
@@ -771,7 +865,7 @@ int main(int argc, char const *argv[])
 	fout = fopen("out.txt", "w");
 	for(line_num=0; line_num<Nk; line_num++){
 		// fprintf(fout, "%lg %lg %lg\n", k[line_num], Pin[line_num], Pout[line_num]);
-		fprintf(fout, "%lg %lg %lg %lg\n", k[line_num], Pin[line_num], P_E[line_num], P_B[line_num]);
+		fprintf(fout, "%lg %lg %lg %lg %lg %lg %lg %lg\n", k[line_num], Pin[line_num], IA_tt_EE[line_num], IA_tt_BB[line_num], IA_ta_dE1[line_num], IA_ta_dE2[line_num], IA_ta_0E0E[line_num], IA_ta_0B0B[line_num]);
 	}
 	fclose(fout);
 	return 0;

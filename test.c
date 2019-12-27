@@ -44,18 +44,18 @@ int main(int argc, char const *argv[])
 
 	clock_t t1, t2;
 	t1 = clock();
-	// Pd1d2(k, Pin, Nk, Pout);
-	// Pd2d2(k, Pin, Nk, Pout);
-	// Pd1s2(k, Pin, Nk, Pout);
-	// Pd2s2(k, Pin, Nk, Pout);
-	// Ps2s2(k, Pin, Nk, Pout);
+	Pd1d2(k, Pin, Nk, Pout);
+	Pd2d2(k, Pin, Nk, Pout);
+	Pd1s2(k, Pin, Nk, Pout);
+	Pd2s2(k, Pin, Nk, Pout);
+	Ps2s2(k, Pin, Nk, Pout);
 
 	IA_tt(k, Pin, Nk, IA_tt_EE, IA_tt_BB);
-	printf("tt finished\n");
+	// printf("tt finished\n");
 	IA_ta(k, Pin, Nk, IA_ta_dE1, IA_ta_dE2, IA_ta_0E0E, IA_ta_0B0B);
-	printf("ta finished\n");
+	// printf("ta finished\n");
 	IA_mix(k,Pin, Nk, IA_mix_A, IA_mix_B, IA_mix_DEE, IA_mix_DBB);
-	printf("mix finished\n");
+	// printf("mix finished\n");
 
 	t2 = clock();
 	printf("time: %lg\n", (double)(t2 - t1) / CLOCKS_PER_SEC);

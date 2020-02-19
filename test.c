@@ -37,18 +37,19 @@ int main(int argc, char const *argv[])
 	// int ell_ar[]   = {0,2,4,2,1,3,0};
 
 
-	double Pout[Nk];
+	double P_d1d2[Nk],P_d2d2[Nk],P_d1s2[Nk],P_d2s2[Nk],P_s2s2[Nk],P_d1d3nl[Nk];
 	double IA_tt_EE[Nk],IA_tt_BB[Nk];
 	double IA_ta_dE1[Nk], IA_ta_dE2[Nk], IA_ta_0E0E[Nk], IA_ta_0B0B[Nk];
 	double IA_mix_A[Nk], IA_mix_B[Nk], IA_mix_DEE[Nk], IA_mix_DBB[Nk];
 
 	clock_t t1, t2;
 	t1 = clock();
-	Pd1d2(k, Pin, Nk, Pout);
-	Pd2d2(k, Pin, Nk, Pout);
-	Pd1s2(k, Pin, Nk, Pout);
-	Pd2s2(k, Pin, Nk, Pout);
-	Ps2s2(k, Pin, Nk, Pout);
+	Pd1d2(k, Pin, Nk, P_d1d2);
+	Pd2d2(k, Pin, Nk, P_d2d2);
+	Pd1s2(k, Pin, Nk, P_d1s2);
+	Pd2s2(k, Pin, Nk, P_d2s2);
+	Ps2s2(k, Pin, Nk, P_s2s2);
+	Pd1d3nl(k, Pin, Nk, P_d1d3nl);
 
 	IA_tt(k, Pin, Nk, IA_tt_EE, IA_tt_BB);
 	// printf("tt finished\n");
@@ -63,7 +64,16 @@ int main(int argc, char const *argv[])
 
 
 	FILE *fout;
-	fout = fopen("out.txt", "w");
+	fout = fopen("out_galbias.txt", "w");
+	for(line_num=0; line_num<Nk; line_num++){
+		// fprintf(fout, "%lg %lg %lg\n", k[line_num], Pin[line_num], Pout[line_num]);
+		fprintf(fout, "%lg %lg %lg %lg %lg %lg %lg %lg \n", k[line_num], Pin[line_num], \
+									P_d1d2[line_num],P_d2d2[line_num],P_d1s2[line_num], \
+									P_d2s2[line_num],P_s2s2[line_num],P_d1d3nl[line_num]);
+	}
+	fclose(fout);
+
+	fout = fopen("out_IA.txt", "w");
 	for(line_num=0; line_num<Nk; line_num++){
 		// fprintf(fout, "%lg %lg %lg\n", k[line_num], Pin[line_num], Pout[line_num]);
 		fprintf(fout, "%lg %lg %lg %lg %lg %lg %lg %lg %lg %lg %lg %lg\n", k[line_num], Pin[line_num], IA_tt_EE[line_num], IA_tt_BB[line_num], \

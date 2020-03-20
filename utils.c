@@ -153,7 +153,7 @@ double Racah(int a, int b, int c, int d, int e, int f){
 	imax = ((a+b+c+d)<(a+d+e+f)? (a+b+c+d):(a+d+e+f));
 	if(b+c+e+f<imax) imax=b+c+e+f;
 
-	double sum;
+	double sum = 0.;
 	long denom;
 	int i;
 	int sign;

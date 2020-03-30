@@ -220,6 +220,9 @@ void J_abl_ar(double *x, double *fx, long N, int *alpha, int *beta, int *ell, in
 	fftw_destroy_plan(plan_backward);
 	fftw_free(out);
 	fftw_free(out_vary);
+	fftw_free(out_pad1);
+	fftw_free(out_pad2);
+	fftw_free(pads_convolve);
 	free(out_ifft);
 	free(fb);
 
@@ -462,6 +465,9 @@ void J_abJ1J2Jk_ar(double *x, double *fx, long N, int *alpha, int *beta, int *J1
 	fftw_free(out);
 	fftw_free(out2);
 	fftw_free(out_vary);
+	fftw_free(out_pad1);
+	fftw_free(out_pad2);
+	fftw_free(pads_convolve);
 	free(out_ifft);
 	free(fb1);free(fb2);
 
@@ -623,6 +629,9 @@ void J_abl(double *x, double *fx, int alpha, int beta, long N, fastpt_config *co
 	fftw_destroy_plan(plan_backward);
 	fftw_free(out);
 	fftw_free(out_vary);
+	fftw_free(out_pad1);
+	fftw_free(out_pad2);
+	fftw_free(pads_convolve);
 	free(out_ifft);
 	free(fb);
 }

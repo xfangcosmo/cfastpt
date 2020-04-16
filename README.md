@@ -1,5 +1,5 @@
 # CFASTPT
-C version of FAST-PT (still developping)
+C version of FAST-PT
 -- Xiao Fang
 
 The official python version of FAST-PT is hosted at [https://github.com/JoeMcEwen/FAST-PT](https://github.com/JoeMcEwen/FAST-PT).

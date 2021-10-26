@@ -65,59 +65,72 @@ Calculate g_l = exp( zln2 + lngamma( (l+nu)/2 + I*eta/2 ) - lngamma( (3+l-nu)/2 
 
 void g_m_vals(double mu, double q_real, double *q_imag, double complex *gm, long N){
 	long i;
+	double complex plus;
+	double complex minus;
+
 	for(i=0; i<N; i++) {
-		gm[i] = cexp(lngamma_lanczos((mu+1.+q_real+I*q_imag[i])/2.) - lngamma_lanczos((mu+1.-q_real-I*q_imag[i])/2.) );		
+		plus = (mu+1.+q_real+I*q_imag[i])/2.;
+		minus= (mu+1.-q_real-I*q_imag[i])/2.;
+		if(fabs(q_imag[i])<10000){
+			gm[i] = cexp(lngamma_lanczos(plus) - lngamma_lanczos(minus));
+		}else{
+			gm[i] = cexp((plus-0.5)*clog(plus) - (minus-0.5)*clog(minus) - q_real - I*q_imag[i] \
+					+1./12 *(1./plus - 1./minus) \
+					+1./360.*(1./cpow(minus,3) - 1./cpow(plus,3)) \
+					+1./1260*(1./cpow(plus,5) - 1./cpow(minus,5)));
+		}
 		// if(isnan(gl[i])) {printf("nan at l,nu,eta, = %lf %lg %lg %lg %lg\n", l,nu, eta[i], gamma_lanczos((l+z)/2.),gamma_lanczos((3.+l-z)/2.));exit(0);}
 	}
 }
 
-void gamma_ratios(double l, double nu, double *eta, double complex *gl, long N) {
-/* z = nu + I*eta
-Calculate g_l = exp( zln2 + lngamma( (l+nu)/2 + I*eta/2 ) - lngamma( (3+l-nu)/2 - I*eta/2 ) ) */
-	long i;
-	double complex z;
-	for(i=0; i<N; i++) {
-		z = nu+I*eta[i];
-		// gl[i] = cexp(z*log(2.) + clog(gamma_lanczos((l+z)/2.) ) - clog(gamma_lanczos((3.+l-z)/2.)));
-		gl[i] = cexp(lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );		
-		// if(isnan(gl[i])) {printf("nan at l,nu,eta, = %lf %lg %lg %lg %lg\n", l,nu, eta[i], gamma_lanczos((l+z)/2.),gamma_lanczos((3.+l-z)/2.));exit(0);}
-	}
-}
 
-void g_l(double l, double nu, double *eta, double complex *gl, long N) {
-/* z = nu + I*eta
-Calculate g_l = exp( zln2 + lngamma( (l+nu)/2 + I*eta/2 ) - lngamma( (3+l-nu)/2 - I*eta/2 ) ) */
-	long i;
-	double complex z;
-	for(i=0; i<N; i++) {
-		z = nu+I*eta[i];
-		// gl[i] = cexp(z*log(2.) + clog(gamma_lanczos((l+z)/2.) ) - clog(gamma_lanczos((3.+l-z)/2.)));
-		gl[i] = cexp(z*log(2.) + lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );		
-		// if(isnan(gl[i])) {printf("nan at l,nu,eta, = %lf %lg %lg %lg %lg\n", l,nu, eta[i], gamma_lanczos((l+z)/2.),gamma_lanczos((3.+l-z)/2.));exit(0);}
-	}
-}
+// void gamma_ratios(double l, double nu, double *eta, double complex *gl, long N) {
+// /* z = nu + I*eta
+// Calculate g_l = exp( zln2 + lngamma( (l+nu)/2 + I*eta/2 ) - lngamma( (3+l-nu)/2 - I*eta/2 ) ) */
+// 	long i;
+// 	double complex z;
+// 	for(i=0; i<N; i++) {
+// 		z = nu+I*eta[i];
+// 		// gl[i] = cexp(z*log(2.) + clog(gamma_lanczos((l+z)/2.) ) - clog(gamma_lanczos((3.+l-z)/2.)));
+// 		gl[i] = cexp(lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );		
+// 		// if(isnan(gl[i])) {printf("nan at l,nu,eta, = %lf %lg %lg %lg %lg\n", l,nu, eta[i], gamma_lanczos((l+z)/2.),gamma_lanczos((3.+l-z)/2.));exit(0);}
+// 	}
+// }
 
-void g_l_1(double l, double nu, double *eta, double complex *gl1, long N) {
-/* z = nu + I*eta
-Calculate g_l_1 = exp(zln2 + lngamma( (l+nu-1)/2 + I*eta/2 ) - lngamma( (4+l-nu)/2 - I*eta/2 ) ) */
-	long i;
-	double complex z;
-	for(i=0; i<N; i++) {
-		z = nu+I*eta[i];
-		gl1[i] = -(z-1.)* cexp((z-1.)*log(2.) + lngamma_lanczos((l+z-1.)/2.) - lngamma_lanczos((4.+l-z)/2.));
-	}
-}
+// void g_l(double l, double nu, double *eta, double complex *gl, long N) {
+// /* z = nu + I*eta
+// Calculate g_l = exp( zln2 + lngamma( (l+nu)/2 + I*eta/2 ) - lngamma( (3+l-nu)/2 - I*eta/2 ) ) */
+// 	long i;
+// 	double complex z;
+// 	for(i=0; i<N; i++) {
+// 		z = nu+I*eta[i];
+// 		// gl[i] = cexp(z*log(2.) + clog(gamma_lanczos((l+z)/2.) ) - clog(gamma_lanczos((3.+l-z)/2.)));
+// 		gl[i] = cexp(z*log(2.) + lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );		
+// 		// if(isnan(gl[i])) {printf("nan at l,nu,eta, = %lf %lg %lg %lg %lg\n", l,nu, eta[i], gamma_lanczos((l+z)/2.),gamma_lanczos((3.+l-z)/2.));exit(0);}
+// 	}
+// }
 
-void g_l_2(double l, double nu, double *eta, double complex *gl2, long N) {
-/* z = nu + I*eta
-Calculate g_l_1 = exp(zln2 + lngamma( (l+nu-2)/2 + I*eta/2 ) - lngamma( (5+l-nu)/2 - I*eta/2 ) ) */
-	long i;
-	double complex z;
-	for(i=0; i<N; i++) {
-		z = nu+I*eta[i];
-		gl2[i] = (z-1.)* (z-2.)* cexp((z-2.)*log(2.) + lngamma_lanczos((l+z-2.)/2.) - lngamma_lanczos((5.+l-z)/2.));
-	}
-}
+// void g_l_1(double l, double nu, double *eta, double complex *gl1, long N) {
+// /* z = nu + I*eta
+// Calculate g_l_1 = exp(zln2 + lngamma( (l+nu-1)/2 + I*eta/2 ) - lngamma( (4+l-nu)/2 - I*eta/2 ) ) */
+// 	long i;
+// 	double complex z;
+// 	for(i=0; i<N; i++) {
+// 		z = nu+I*eta[i];
+// 		gl1[i] = -(z-1.)* cexp((z-1.)*log(2.) + lngamma_lanczos((l+z-1.)/2.) - lngamma_lanczos((4.+l-z)/2.));
+// 	}
+// }
+
+// void g_l_2(double l, double nu, double *eta, double complex *gl2, long N) {
+// /* z = nu + I*eta
+// Calculate g_l_1 = exp(zln2 + lngamma( (l+nu-2)/2 + I*eta/2 ) - lngamma( (5+l-nu)/2 - I*eta/2 ) ) */
+// 	long i;
+// 	double complex z;
+// 	for(i=0; i<N; i++) {
+// 		z = nu+I*eta[i];
+// 		gl2[i] = (z-1.)* (z-2.)* cexp((z-2.)*log(2.) + lngamma_lanczos((l+z-2.)/2.) - lngamma_lanczos((5.+l-z)/2.));
+// 	}
+// }
 
 void c_window(double complex *out, double c_window_width, long halfN) {
 	// 'out' is (halfN+1) complex array
